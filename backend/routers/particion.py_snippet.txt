@@ -1,0 +1,76 @@
+```python
+@router.post("/procesar")
+async def procesar_particion(
+    archivo: UploadFile = File(...),
+    plantilla_id: str = Form(...),
+    apellidos_nombres: str = Form(...),
+):
+    """Recibe un PDF, lo corta según la plantilla y devuelve un ZIP."""
+    if not archivo.filename.lower().endswith(".pdf"):
+        return JSONResponse(status_code=400, content={"detail": "Solo se aceptan archivos PDF."})
+
+    plantillas = load_particion_config()
+    plantilla = next((p for p in plantillas if p["id"] == plantilla_id), None)
+    if not plantilla:
+        return JSONResponse(status_code=404, content={"detail": "Plantilla de corte no encontrada."})
+
+    cortes = plantilla.get("cortes", [])
+    if not cortes:
+        return JSONResponse(status_code=400, content={"detail": "La plantilla no tiene reglas de corte."})
+
+    try:
+        pdf_bytes = await archivo.read()
+        with fitz.open("pdf", pdf_bytes) as temp_doc:
+            total_pages = len(temp_doc)
+    except Exception as e:
+        print(f"[procesar_particion] Error al abrir el PDF original: {e}")
+        return JSONResponse(status_code=500, content={"detail": "El archivo PDF subido está corrupto o es inválido."})
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        for corte in cortes:
+            nombre = corte.get("nombre_corte", "parte")
+            paginas_text = corte.get("paginas", "")
+            
+            try:
+                if paginas_text:
+                    raw_indices = parse_pages(paginas_text, total_pages)
+                else:
+                    inicio = int(corte.get("inicio", 1)) - 1
+                    fin = int(corte.get("fin", total_pages)) - 1
+                    inicio = max(0, min(inicio, total_pages - 1))
+                    fin = max(inicio, min(fin, total_pages - 1))
+                    raw_indices = list(range(inicio, fin + 1))
+                
+                # Filtrar rigurosamente los índices para que estén dentro del rango válido
+                page_indices = [idx for idx in raw_indices if 0 <= idx < total_pages]
+
+                if not page_indices:
+                    print(f"[procesar_particion] Corte '{nombre}' omitido: no hay páginas válidas.")
+                    continue
+
+                sub_doc = fitz.open("pdf", pdf_bytes)
+                sub_doc.select(page_indices)
+                
+                sub_buffer = io.BytesIO()
+                sub_doc.save(sub_buffer)
+                sub_doc.close()
+                
+                sub_buffer.seek(0)
+                zf.writestr(f"{nombre}.pdf", sub_buffer.read())
+                
+            except Exception as e:
+                # Si este corte específico falla, registramos el error y continuamos con los demás
+                print(f"[procesar_particion] Error al procesar el corte '{nombre}': {e}")
+                continue
+
+    zip_buffer.seek(0)
+    safe_name = apellidos_nombres.replace(" ", "_").replace("/", "_")
+    zip_filename = f"{safe_name}.zip"
+
+    return Response(
+        content=zip_buffer.read(),
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{zip_filename}"'},
+    )
+```

@@ -1,0 +1,8 @@
+// === ARCHIVO: frontend/src/pages/ParticionPage.jsx ===
+// Cerca de la línea 80, dentro de handleSubmit, reemplazamos la creación del nombre del ZIP
+
+const safeName = nombres.trim().replace(/\s+/g, '_');
+// ELIMINAMOS la concatenación "Expediente_" para cumplir con tu requerimiento
+const zipName = `${safeName}.zip`;
+
+const guardado = await descargarArchivo(blob, zipName, ".zip", "application/zip");

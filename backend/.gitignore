@@ -1,0 +1,17 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Variables de entorno
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Expedientes y plantillas locales (evitar subir datos sensibles a repo)
+expedientes_generados/
+plantillas_pdf/
