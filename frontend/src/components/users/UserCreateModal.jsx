@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X, Plus, ChevronDown } from 'lucide-react';
 
-const API = 'http://localhost:8000/api/users';
+const API = `${import.meta.env.VITE_API_URL}/api/users`;
 
 /* ── Modal Crear Usuario ───────────────────────────────────────────────────── */
 export default function UserCreateModal({ onClose, onCreated }) {

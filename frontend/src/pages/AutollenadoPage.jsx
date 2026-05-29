@@ -33,7 +33,7 @@ export default function AutollenadoPage() {
   }, [form]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/plantillas')
+    fetch(`${import.meta.env.VITE_API_URL}/api/plantillas`)
       .then(res => res.json())
       .then(data => setPlantillas(data.plantillas || []))
       .catch(() => { });
@@ -78,7 +78,7 @@ export default function AutollenadoPage() {
             total_cd: totalCD,
           },
         };
-        const res = await fetch('http://localhost:8000/api/autollenado/preview', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/autollenado/preview`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
@@ -147,7 +147,7 @@ export default function AutollenadoPage() {
       };
 
       // 5. Ejecutar fetch al endpoint
-      const res = await fetch('http://localhost:8000/api/generar-expediente-completo', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/generar-expediente-completo`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

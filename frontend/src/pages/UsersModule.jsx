@@ -6,7 +6,7 @@ import UsersTable from '../components/users/UsersTable';
 import UserCreateModal from '../components/users/UserCreateModal';
 import { UserEditRoleModal, UserPasswordModal } from '../components/users/UserModals';
 
-const API = 'http://localhost:8000/api/users';
+const API = `${import.meta.env.VITE_API_URL}/api/users`;
 
 /* ══════════════════════════════════════════════════════════════════════════════
    UsersModule — CONTROLADOR

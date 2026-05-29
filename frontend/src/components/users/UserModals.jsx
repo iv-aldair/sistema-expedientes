@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X, KeyRound, Pencil, ChevronDown } from 'lucide-react';
 
-const API = 'http://localhost:8000/api/users';
+const API = `${import.meta.env.VITE_API_URL}/api/users`;
 
 /* ── Modal Editar Rol ──────────────────────────────────────────────────────── */
 export function UserEditRoleModal({ user, onClose, onSaved }) {
