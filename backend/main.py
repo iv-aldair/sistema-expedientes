@@ -26,7 +26,8 @@ app.add_middleware(
         "http://localhost:5174", 
         "http://127.0.0.1:5173", 
         "http://127.0.0.1:5174",
-        "https://tu-proyecto.vercel.app" # TODO: Reemplazar con tu dominio real de Vercel
+        "http://localhost:8000",
+    "https://sistema-expedientes-seven.vercel.app" # TODO: Reemplazar con tu dominio real de Vercel
     ],
     allow_credentials=True,
     allow_methods=["*"],
