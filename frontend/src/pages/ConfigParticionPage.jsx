@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const API = import.meta.env.VITE_API_URL;
 
 export default function ConfigParticionPage() {
+  const { session, userRole } = useAuth();
   const [plantillas, setPlantillas] = useState([]);
   const [nombre, setNombre] = useState('');
   const [cortes, setCortes] = useState([{ nombre_corte: '', paginas: '' }]);
@@ -12,7 +14,10 @@ export default function ConfigParticionPage() {
 
   const fetchPlantillas = async () => {
     try {
-      const res = await fetch(`${API}/api/particion/plantillas`);
+      const userId = session?.user?.id || '';
+      const role = userRole || 'user';
+      const params = new URLSearchParams({ user_id: userId, role });
+      const res = await fetch(`${API}/api/particion/plantillas?${params}`);
       const data = await res.json();
       setPlantillas(data.plantillas || []);
     } catch { /* silent */ }
@@ -68,7 +73,12 @@ export default function ConfigParticionPage() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: nombre.trim(), cortes }),
+        body: JSON.stringify({
+          nombre: nombre.trim(),
+          cortes,
+          user_id: session?.user?.id || '',
+          role: userRole || 'user',
+        }),
       });
       const data = await res.json();
       if (res.ok) {

@@ -1,18 +1,24 @@
 import io
 import fitz
 import zipfile
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, UploadFile, File, Form, Query
 from fastapi.responses import JSONResponse, Response
 from pypdf import PdfReader, PdfWriter
+from typing import Optional
 from utils.supabase_client import get_all_plantillas, upsert_config_particion, get_plantilla_by_nombre
 from utils.pdf_core import parse_pages
 
 router = APIRouter(prefix="/api/particion", tags=["Partición"])
 
 @router.get("/plantillas")
-def obtener_plantillas_particion():
-    """Retorna las plantillas de corte guardadas desde Supabase."""
-    plantillas_db = get_all_plantillas()
+def obtener_plantillas_particion(
+    user_id: Optional[str] = Query(None, description="UUID del usuario autenticado"),
+    role: Optional[str] = Query(None, description="Rol del usuario (admin/user)"),
+):
+    """Retorna las plantillas de corte guardadas desde Supabase, filtradas por RBAC."""
+    is_admin = str(role or "").lower().strip() == "admin"
+    plantillas_db = get_all_plantillas(user_id=user_id, is_admin=is_admin)
+
     resultado = []
     for p in plantillas_db:
         if p.get("config_particion"):
@@ -21,7 +27,9 @@ def obtener_plantillas_particion():
             resultado.append({
                 "id": p["nombre_plantilla"],
                 "nombre": p["nombre_plantilla"],
-                "cortes": cortes
+                "cortes": cortes,
+                "is_global": p.get("is_global", True),
+                "owner_id": p.get("owner_id"),
             })
     return {"plantillas": resultado}
 
@@ -31,8 +39,25 @@ def guardar_plantilla_particion(body: dict):
     nombre = body.get("nombre", "Sin nombre")
     cortes = body.get("cortes", [])
     config_particion = {"cortes": cortes}
+
+    # ── RBAC: determinar owner_id e is_global ──
+    role = str(body.get("role", "")).lower().strip()
+    user_id = body.get("user_id")
+    is_admin = role == "admin"
+
+    if is_admin:
+        owner_id_val = None
+        is_global_val = True
+    else:
+        owner_id_val = user_id
+        is_global_val = False
     
-    exito = upsert_config_particion(nombre, config_particion)
+    exito = upsert_config_particion(
+        nombre,
+        config_particion,
+        owner_id=owner_id_val,
+        is_global=is_global_val,
+    )
     if exito:
         return {"mensaje": f"Configuración de corte '{nombre}' guardada en Supabase.", "id": nombre}
     else:

@@ -106,7 +106,7 @@ export default function Sidebar({ activeView, onNavigate }) {
         <div className="my-4 border-t border-white/8" />
         {!isCollapsed && <p className="px-4 mb-3 text-[10px] font-semibold uppercase tracking-widest text-blue-400/50">Sistema</p>}
 
-        {/* Configuración Accordion */}
+        {/* Configuración Accordion — Visible para todos */}
         <div
           title="Configuración"
           className={`${linkBase} ${!isCollapsed ? 'justify-between' : ''} ${
@@ -131,13 +131,17 @@ export default function Sidebar({ activeView, onNavigate }) {
         {/* Sub-items */}
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${configOpen && !isCollapsed ? 'max-h-40 opacity-100 mt-1' : 'max-h-0 opacity-0 hidden'}`}>
           <div className="space-y-1 py-1">
-            <div
-              className={`${subBase} ${activeView === 'config-auto' ? subActive : subInactive}`}
-              onClick={() => onNavigate('config-auto')}
-            >
-              <IconSubItem />
-              <span className="whitespace-nowrap">Config. Autollenado</span>
-            </div>
+            {/* Config. Autollenado — Solo Admin */}
+            {isAdmin && (
+              <div
+                className={`${subBase} ${activeView === 'config-auto' ? subActive : subInactive}`}
+                onClick={() => onNavigate('config-auto')}
+              >
+                <IconSubItem />
+                <span className="whitespace-nowrap">Config. Autollenado</span>
+              </div>
+            )}
+            {/* Config. Partición — Todos los usuarios */}
             <div
               className={`${subBase} ${activeView === 'config-particion' ? subActive : subInactive}`}
               onClick={() => onNavigate('config-particion')}

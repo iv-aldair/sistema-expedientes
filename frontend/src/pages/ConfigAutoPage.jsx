@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -28,6 +29,7 @@ const IconPDF = () => (
 );
 
 export default function ConfigAutoPage() {
+  const { session, userRole } = useAuth();
   const [plantillas, setPlantillas] = useState([]);
   const [nombre, setNombre] = useState('');
   const [archivo, setArchivo] = useState(null);
@@ -41,7 +43,10 @@ export default function ConfigAutoPage() {
   /* ── Cargar plantillas ── */
   const fetchPlantillas = async () => {
     try {
-      const res = await fetch(`${API}/api/plantillas`);
+      const userId = session?.user?.id || '';
+      const role = userRole || 'user';
+      const params = new URLSearchParams({ user_id: userId, role });
+      const res = await fetch(`${API}/api/plantillas?${params}`);
       const data = await res.json();
       setPlantillas(data.plantillas || []);
     } catch { /* silencioso */ }
@@ -80,6 +85,8 @@ export default function ConfigAutoPage() {
       const formData = new FormData();
       formData.append('nombre_plantilla', nombre.trim());
       formData.append('archivo', archivo);
+      formData.append('user_id', session?.user?.id || '');
+      formData.append('role', userRole || 'user');
 
       const res = await fetch(`${API}/api/plantillas/upload`, { method: 'POST', body: formData });
       const data = await res.json();

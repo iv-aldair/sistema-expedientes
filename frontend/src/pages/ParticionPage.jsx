@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 
 
 const API = import.meta.env.VITE_API_URL;
 
 export default function ParticionPage() {
+  const { session, userRole } = useAuth();
   const [plantillas, setPlantillas] = useState([]);
   const [plantillaId, setPlantillaId] = useState('');
   const [nombres, setNombres] = useState('');
@@ -14,11 +16,14 @@ export default function ParticionPage() {
   const fileRef = useRef(null);
 
   useEffect(() => {
-    fetch(`${API}/api/particion/plantillas`)
+    const userId = session?.user?.id || '';
+    const role = userRole || 'user';
+    const params = new URLSearchParams({ user_id: userId, role });
+    fetch(`${API}/api/particion/plantillas?${params}`)
       .then(res => res.json())
       .then(data => setPlantillas(data.plantillas || []))
       .catch(() => {});
-  }, []);
+  }, [session, userRole]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -34,7 +34,7 @@ def get_plantilla_by_nombre(nombre_plantilla: str) -> dict | None:
     url = f"{SUPABASE_URL}/rest/v1/plantillas"
     params = {
         "nombre_plantilla": f"eq.{nombre_plantilla}",
-        "select": "nombre_plantilla,config_autollenado,config_particion",
+        "select": "nombre_plantilla,config_autollenado,config_particion,owner_id,is_global",
         "limit": "1",
     }
 
@@ -73,15 +73,29 @@ def get_all_plantillas_nombres() -> list[str]:
         traceback.print_exc()
         return []
 
-def get_all_plantillas() -> list[dict]:
+def get_all_plantillas(user_id: str = None, is_admin: bool = False) -> list[dict]:
     """
-    Retorna todas las filas de la tabla plantillas.
+    Retorna las filas de la tabla plantillas, filtradas por RBAC.
+    
+    - Si is_admin=True: retorna TODAS las plantillas.
+    - Si is_admin=False y hay user_id: retorna solo las globales + las del usuario.
+    - Si no hay user_id: retorna solo las globales.
     """
     url = f"{SUPABASE_URL}/rest/v1/plantillas"
     params = {
         "select": "*",
         "order": "nombre_plantilla.asc",
     }
+
+    # ── Filtro RBAC ──
+    if not is_admin:
+        if user_id:
+            # PostgREST OR filter: is_global=true OR owner_id=user_id
+            params["or"] = f"(is_global.eq.true,owner_id.eq.{user_id})"
+        else:
+            # Sin usuario identificado, solo globales
+            params["is_global"] = "eq.true"
+
     try:
         with httpx.Client(timeout=10) as client:
             resp = client.get(url, headers=_HEADERS, params=params)
@@ -92,9 +106,11 @@ def get_all_plantillas() -> list[dict]:
         traceback.print_exc()
         return []
 
-def upsert_config_autollenado(nombre_plantilla: str, config_autollenado: dict) -> bool:
+def upsert_config_autollenado(nombre_plantilla: str, config_autollenado: dict,
+                               owner_id: str = None, is_global: bool = True) -> bool:
     """
     Inserta o actualiza la configuración de autollenado para una plantilla.
+    Incluye owner_id e is_global en el INSERT para RBAC.
     """
     url = f"{SUPABASE_URL}/rest/v1/plantillas"
     existente = get_plantilla_by_nombre(nombre_plantilla)
@@ -102,13 +118,20 @@ def upsert_config_autollenado(nombre_plantilla: str, config_autollenado: dict) -
     try:
         with httpx.Client(timeout=10) as client:
             if existente:
-                # UPDATE
+                # UPDATE — no cambiamos owner_id/is_global en update para no perder propiedad
                 update_url = f"{url}?nombre_plantilla=eq.{nombre_plantilla}"
                 resp = client.patch(update_url, headers=_HEADERS, json={"config_autollenado": config_autollenado})
                 resp.raise_for_status()
             else:
-                # INSERT
-                resp = client.post(url, headers=_HEADERS, json={"nombre_plantilla": nombre_plantilla, "config_autollenado": config_autollenado})
+                # INSERT — incluir owner_id e is_global
+                insert_data = {
+                    "nombre_plantilla": nombre_plantilla,
+                    "config_autollenado": config_autollenado,
+                    "is_global": is_global,
+                }
+                if owner_id:
+                    insert_data["owner_id"] = owner_id
+                resp = client.post(url, headers=_HEADERS, json=insert_data)
                 resp.raise_for_status()
         return True
     except Exception as e:
@@ -116,9 +139,11 @@ def upsert_config_autollenado(nombre_plantilla: str, config_autollenado: dict) -
         traceback.print_exc()
         return False
 
-def upsert_config_particion(nombre_plantilla: str, config_particion: dict) -> bool:
+def upsert_config_particion(nombre_plantilla: str, config_particion: dict,
+                             owner_id: str = None, is_global: bool = True) -> bool:
     """
     Inserta o actualiza la configuración de partición para una plantilla.
+    Incluye owner_id e is_global en el INSERT para RBAC.
     """
     url = f"{SUPABASE_URL}/rest/v1/plantillas"
     existente = get_plantilla_by_nombre(nombre_plantilla)
@@ -126,13 +151,20 @@ def upsert_config_particion(nombre_plantilla: str, config_particion: dict) -> bo
     try:
         with httpx.Client(timeout=10) as client:
             if existente:
-                # UPDATE
+                # UPDATE — no cambiamos owner_id/is_global en update para no perder propiedad
                 update_url = f"{url}?nombre_plantilla=eq.{nombre_plantilla}"
                 resp = client.patch(update_url, headers=_HEADERS, json={"config_particion": config_particion})
                 resp.raise_for_status()
             else:
-                # INSERT
-                resp = client.post(url, headers=_HEADERS, json={"nombre_plantilla": nombre_plantilla, "config_particion": config_particion})
+                # INSERT — incluir owner_id e is_global
+                insert_data = {
+                    "nombre_plantilla": nombre_plantilla,
+                    "config_particion": config_particion,
+                    "is_global": is_global,
+                }
+                if owner_id:
+                    insert_data["owner_id"] = owner_id
+                resp = client.post(url, headers=_HEADERS, json=insert_data)
                 resp.raise_for_status()
         return True
     except Exception as e:

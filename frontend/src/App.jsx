@@ -36,8 +36,9 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Protección: si no es admin e intenta acceder a 'users', lo redirigimos
-  const safeView = (activeView === 'users' && !isAdmin) ? 'autollenado' : activeView;
+  // Protección RBAC: si no es admin e intenta acceder a vistas restringidas, redirigir
+  const adminOnlyViews = ['users', 'config-auto'];
+  const safeView = (adminOnlyViews.includes(activeView) && !isAdmin) ? 'autollenado' : activeView;
   const ActivePage = VIEWS[safeView] || AutollenadoPage;
 
   return (
