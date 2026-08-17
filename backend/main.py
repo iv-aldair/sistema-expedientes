@@ -5,6 +5,7 @@ import threading
 import time
 from dotenv import load_dotenv
 # pyrefly: ignore [missing-import]
+# Sistema de Expedientes - Version 3.1
 from fastapi import FastAPI
 # pyrefly: ignore [missing-import]
 from fastapi.responses import Response

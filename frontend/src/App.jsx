@@ -1,3 +1,4 @@
+// Sistema de Expedientes - Version 3.1
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './index.css';
