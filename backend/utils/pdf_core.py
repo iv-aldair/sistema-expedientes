@@ -221,16 +221,20 @@ def flatten_data(data: AutollenadoRequest) -> dict:
     # ══════ BLOQUE 5: VARIABLES COMPUESTAS (Dirección + Ubigeo) ══════
     def _join(*parts: str) -> str:
         """Une partes no vacías con un espacio, ignorando nulos/blancos."""
-        return " ".join(p.strip() for p in parts if p and p.strip())
+        return " ".join(str(p).strip() for p in parts if p is not None and str(p).strip())
 
     def _join_ubigeo(*parts: str) -> str:
         """Une partes no vacías con ' / ' como separador."""
-        return " / ".join(p.strip() for p in parts if p and p.strip())
+        return " / ".join(str(p).strip() for p in parts if p is not None and str(p).strip())
 
-    # --- Dirección personal completa ---
-    dp_dir = _join(raw.get("dp_tipo_via", ""), raw.get("dp_numero_lt", ""))
+    # --- Dirección personal completa (Avenida/Calle/Jr + N°/Mz/Lt) ---
+    dp_dir = _join(
+        raw.get("dp_av_calle_jr") or raw.get("av_calle_jr", ""),
+        raw.get("dp_numero_lt") or raw.get("numero_lt", "")
+    )
     if dp_dir:
         raw["dp_direccion_completa"] = dp_dir
+        raw["dp_avcalle_jpsje"] = dp_dir
 
     # --- Ubigeo personal completo (Distrito / Provincia / Departamento) ---
     dp_ubigeo = _join_ubigeo(
@@ -242,7 +246,10 @@ def flatten_data(data: AutollenadoRequest) -> dict:
         raw["dp_ubigeo_completo"] = dp_ubigeo
 
     # --- Dirección laboral completa ---
-    lab_dir = _join(raw.get("lab_tipo_via", ""), raw.get("lab_numero_lt", ""))
+    lab_dir = _join(
+        raw.get("lab_av_calle_jr") or raw.get("lab_tipo_via", ""),
+        raw.get("lab_numero_lt", "")
+    )
     if lab_dir:
         raw["lab_direccion_completa"] = lab_dir
 
