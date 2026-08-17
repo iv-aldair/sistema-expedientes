@@ -238,7 +238,7 @@ export default function FormularioAutollenado({
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="space-y-6">
-      {/* ── Template Selector + Action Buttons ── */}
+      {/* ── Selector de Plantilla y Botones de Acción ── */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 animate-fade-in">
         <FormSelect
           label="Seleccionar Plantilla de PDF" name="plantilla_id" required

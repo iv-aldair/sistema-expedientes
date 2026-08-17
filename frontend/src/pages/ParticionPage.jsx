@@ -127,7 +127,7 @@ export default function ParticionPage() {
           </div>
 
           <div className="p-6 space-y-5">
-            {/* Plantilla selector */}
+            {/* Selector de plantilla */}
             <div>
               <label className="block text-[11px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
                 Plantilla de Corte <span className="text-red-400">*</span>
@@ -141,7 +141,7 @@ export default function ParticionPage() {
               </select>
             </div>
 
-            {/* Preview of cuts */}
+            {/* Vista previa de cortes */}
             {selectedPlantilla && selectedPlantilla.cortes?.length > 0 && (
               <div className="bg-bbva-sky/40 rounded-xl p-4 border border-bbva-light/50 animate-fade-in">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-bbva-dark mb-2">Cortes configurados</p>
@@ -155,7 +155,7 @@ export default function ParticionPage() {
               </div>
             )}
 
-            {/* Apellidos */}
+            {/* Apellidos y nombres */}
             <div>
               <label className="block text-[11px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
                 Apellidos y Nombres <span className="text-red-400">*</span>
@@ -165,7 +165,7 @@ export default function ParticionPage() {
                 className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-800 placeholder:text-slate-300 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-bbva-blue/20 focus:border-bbva-blue transition-all duration-200" />
             </div>
 
-            {/* File upload */}
+            {/* Subida de archivo */}
             <div>
               <label className="block text-[11px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
                 Archivo PDF <span className="text-red-400">*</span>
@@ -188,7 +188,7 @@ export default function ParticionPage() {
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Botón de envío */}
             <button type="submit" disabled={loading}
               className="w-full py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-bbva-dark to-bbva-blue hover:from-bbva-blue hover:to-bbva-medium shadow-lg shadow-bbva-blue/25 hover:shadow-bbva-blue/40 transition-all duration-300 disabled:opacity-60 flex items-center justify-center gap-2">
               {loading ? (

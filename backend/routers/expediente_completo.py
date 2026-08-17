@@ -123,7 +123,7 @@ async def generar_expediente_completo(body: dict):
         # compatible con cualquier lector y con la partición vía pypdf.
         # ════════════════════════════════════════════════════════════
         try:
-            doc.bake()                       # PyMuPDF ≥ 1.21: flatten widgets + annots
+            doc.bake()                       # PyMuPDF ≥ 1.21: aplanar campos (widgets) y anotaciones
             print("[expediente] Flatten (bake) aplicado correctamente.")
         except AttributeError:
             # Fallback para versiones antiguas de PyMuPDF sin doc.bake()

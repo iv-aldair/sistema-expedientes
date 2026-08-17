@@ -1,4 +1,4 @@
-"""Pydantic schemas for the Autollenado module."""
+"""Esquemas Pydantic para el módulo de Autollenado."""
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel
 from typing import Optional, List

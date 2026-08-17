@@ -131,13 +131,13 @@ export default function ConfigAutoPage() {
 
   return (
     <div className="p-6 lg:p-8 max-w-[900px] mx-auto">
-      {/* Header */}
+      {/* Encabezado */}
       <div className="mb-8 animate-fade-in">
         <h1 className="text-2xl font-bold text-slate-800">Configuración Autollenado</h1>
         <p className="text-slate-400 text-sm mt-1">Administra las plantillas PDF disponibles para el módulo de autollenado</p>
       </div>
 
-      {/* Alerts */}
+      {/* Alertas */}
       {status.message && (
         <div className={`mb-5 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 animate-fade-in ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
           {status.type === 'success' ? '✓' : '✕'} {status.message}
@@ -147,7 +147,7 @@ export default function ConfigAutoPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-        {/* ── Upload Card ── */}
+        {/* ── Tarjeta de Subida ── */}
         <div className="lg:col-span-2 animate-fade-in">
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden h-full transition-all">
             <div className={`px-6 py-4 border-b border-slate-100 flex items-center gap-3 transition-colors ${isEditing ? 'bg-gradient-to-r from-yellow-50 to-white' : 'bg-gradient-to-r from-bbva-sky/60 to-white'}`}>
@@ -175,7 +175,7 @@ export default function ConfigAutoPage() {
                 />
               </div>
 
-              {/* File input */}
+              {/* Entrada de archivo */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
                   Archivo PDF <span className="text-red-400">*</span>
@@ -211,7 +211,7 @@ export default function ConfigAutoPage() {
                 </div>
               </div>
 
-              {/* Submit / Actions */}
+              {/* Envío y acciones */}
               <div className="flex gap-2 pt-2">
                 {isEditing && (
                   <button
@@ -239,7 +239,7 @@ export default function ConfigAutoPage() {
           </div>
         </div>
 
-        {/* ── Template List Card ── */}
+        {/* ── Tarjeta de Lista de Plantillas ── */}
         <div className="lg:col-span-3 animate-fade-in">
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden h-full">
             <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-bbva-sky/60 to-white flex items-center justify-between">

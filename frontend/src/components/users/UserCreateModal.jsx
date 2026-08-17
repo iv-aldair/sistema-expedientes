@@ -47,7 +47,7 @@ export default function UserCreateModal({ onClose, onCreated }) {
         className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+        {/* Encabezado */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md">
@@ -66,7 +66,7 @@ export default function UserCreateModal({ onClose, onCreated }) {
           </button>
         </div>
 
-        {/* Body */}
+        {/* Cuerpo del formulario */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Email */}
           <div>
@@ -120,11 +120,11 @@ export default function UserCreateModal({ onClose, onCreated }) {
             </div>
           </div>
 
-          {/* Feedback */}
+          {/* Mensajes de estado */}
           {error   && <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">{error}</div>}
           {success && <div className="p-3 bg-green-50 border border-green-100 rounded-xl text-sm text-green-600">{success}</div>}
 
-          {/* Submit */}
+          {/* Botón de envío */}
           <button
             type="submit"
             disabled={loading}

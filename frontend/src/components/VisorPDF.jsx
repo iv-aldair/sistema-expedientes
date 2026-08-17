@@ -3,7 +3,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// ── Worker config ─────────────────────────────────────────────────────────────
+// ── Configuración del Worker ──────────────────────────────────────────────────
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -275,7 +275,7 @@ function VisorPDFInner({ previewUrl, isPreviewLoading, setIsPreviewLoading }) {
                 </div>
               }
             >
-              {/* Render LAZY de cada página */}
+              {/* Renderizado diferido (lazy) de cada página */}
               {numPages && Array.from({ length: numPages }, (_, i) => (
                 <LazyPDFPage
                   key={i}

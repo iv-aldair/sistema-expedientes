@@ -201,7 +201,7 @@ export function AuthProvider({ children }) {
     }
 
     // 2. Limpieza agresiva del navegador
-    localStorage.removeItem('userRole'); // Explicit removal per requirements
+    localStorage.removeItem('userRole'); // Eliminación explícita según requerimientos
     localStorage.clear();
     sessionStorage.clear();
 

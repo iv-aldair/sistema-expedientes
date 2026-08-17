@@ -1,6 +1,6 @@
-/* ── Reusable form primitives for the Autollenado module ── */
+/* ── Primitivas de formulario reutilizables para el módulo de Autollenado ── */
 
-/** Section card wrapper with title and optional icon */
+/** Contenedor de tarjeta de sección con título e icono opcional */
 export function SectionCard({ title, subtitle, icon, children, className = '' }) {
   return (
     <div className={`bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden animate-fade-in ${className}`}>
@@ -20,7 +20,7 @@ export function SectionCard({ title, subtitle, icon, children, className = '' })
   );
 }
 
-/** Sub-group divider inside a section */
+/** Divisor de subgrupo dentro de una sección */
 export function SubGroup({ title, children }) {
   return (
     <div className="mt-6 first:mt-0">
@@ -33,7 +33,7 @@ export function SubGroup({ title, children }) {
   );
 }
 
-/** Labelled text input */
+/** Campo de entrada de texto con etiqueta */
 export function FormInput({ label, name, value, onChange, type = 'text', placeholder = '', required = false, readOnly = false, className = '' }) {
   return (
     <div className={className}>
@@ -57,7 +57,7 @@ export function FormInput({ label, name, value, onChange, type = 'text', placeho
   );
 }
 
-/** Labelled select dropdown */
+/** Menú desplegable con etiqueta */
 export function FormSelect({ label, name, value, onChange, options = [], placeholder = 'Seleccionar...', required = false, className = '' }) {
   return (
     <div className={className}>
@@ -79,7 +79,7 @@ export function FormSelect({ label, name, value, onChange, options = [], placeho
   );
 }
 
-/** Dynamic table with add/remove rows */
+/** Tabla dinámica con agregar/eliminar filas */
 export function DynamicTable({ title, columns, rows, onRowChange, onAddRow, onRemoveRow }) {
   return (
     <div className="mt-5">

@@ -90,7 +90,7 @@ def get_all_plantillas(user_id: str = None, is_admin: bool = False) -> list[dict
     # ── Filtro RBAC ──
     if not is_admin:
         if user_id:
-            # PostgREST OR filter: is_global=true OR owner_id=user_id
+            # Filtro OR de PostgREST: is_global=true O owner_id=user_id
             params["or"] = f"(is_global.eq.true,owner_id.eq.{user_id})"
         else:
             # Sin usuario identificado, solo globales
@@ -118,12 +118,12 @@ def upsert_config_autollenado(nombre_plantilla: str, config_autollenado: dict,
     try:
         with httpx.Client(timeout=10) as client:
             if existente:
-                # UPDATE — no cambiamos owner_id/is_global en update para no perder propiedad
+                # ACTUALIZACIÓN — no modificamos owner_id/is_global para preservar la propiedad
                 update_url = f"{url}?nombre_plantilla=eq.{nombre_plantilla}"
                 resp = client.patch(update_url, headers=_HEADERS, json={"config_autollenado": config_autollenado})
                 resp.raise_for_status()
             else:
-                # INSERT — incluir owner_id e is_global
+                # INSERCIÓN — incluir owner_id e is_global
                 insert_data = {
                     "nombre_plantilla": nombre_plantilla,
                     "config_autollenado": config_autollenado,
@@ -151,12 +151,12 @@ def upsert_config_particion(nombre_plantilla: str, config_particion: dict,
     try:
         with httpx.Client(timeout=10) as client:
             if existente:
-                # UPDATE — no cambiamos owner_id/is_global en update para no perder propiedad
+                # ACTUALIZACIÓN — no modificamos owner_id/is_global para preservar la propiedad
                 update_url = f"{url}?nombre_plantilla=eq.{nombre_plantilla}"
                 resp = client.patch(update_url, headers=_HEADERS, json={"config_particion": config_particion})
                 resp.raise_for_status()
             else:
-                # INSERT — incluir owner_id e is_global
+                # INSERCIÓN — incluir owner_id e is_global
                 insert_data = {
                     "nombre_plantilla": nombre_plantilla,
                     "config_particion": config_particion,

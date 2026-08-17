@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Users } from 'lucide-react';
 
-/* ── SVG Icon helpers ── */
+/* ── Iconos auxiliares SVG ── */
 const IconDoc = () => (
   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -60,7 +60,7 @@ export default function Sidebar({ activeView, onNavigate }) {
 
   return (
     <aside className={`sticky top-0 ${isCollapsed ? 'w-[80px]' : 'w-[272px]'} h-screen bg-gradient-to-b from-bbva-navy via-bbva-dark to-bbva-navy flex flex-col shrink-0 shadow-2xl transition-all duration-300 z-50`}>
-      {/* ── Brand & Toggle ── */}
+      {/* ── Marca y Alternador ── */}
       <div className={`px-4 py-7 border-b border-white/10 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
         {!isCollapsed && (
           <div className="flex items-center gap-3 overflow-hidden">
@@ -78,7 +78,7 @@ export default function Sidebar({ activeView, onNavigate }) {
         </button>
       </div>
 
-      {/* ── Navigation ── */}
+      {/* ── Navegación ── */}
       <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-4'} py-6 space-y-1.5 overflow-y-auto overflow-x-hidden`}>
         {!isCollapsed && <p className="px-4 mb-3 text-[10px] font-semibold uppercase tracking-widest text-blue-400/50">Módulos</p>}
 
@@ -102,11 +102,11 @@ export default function Sidebar({ activeView, onNavigate }) {
           {!isCollapsed && <span>Partición PDF</span>}
         </div>
 
-        {/* ── Separator ── */}
+        {/* ── Separador ── */}
         <div className="my-4 border-t border-white/8" />
         {!isCollapsed && <p className="px-4 mb-3 text-[10px] font-semibold uppercase tracking-widest text-blue-400/50">Sistema</p>}
 
-        {/* Configuración Accordion — Visible para todos */}
+        {/* Acordeón de Configuración — Visible para todos */}
         <div
           title="Configuración"
           className={`${linkBase} ${!isCollapsed ? 'justify-between' : ''} ${
@@ -128,7 +128,7 @@ export default function Sidebar({ activeView, onNavigate }) {
           {!isCollapsed && <IconChevron open={configOpen} />}
         </div>
 
-        {/* Sub-items */}
+        {/* Subelementos */}
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${configOpen && !isCollapsed ? 'max-h-40 opacity-100 mt-1' : 'max-h-0 opacity-0 hidden'}`}>
           <div className="space-y-1 py-1">
             {/* Config. Autollenado — Solo Admin */}
@@ -169,9 +169,9 @@ export default function Sidebar({ activeView, onNavigate }) {
         )}
       </nav>
 
-      {/* ── Footer ── */}
+      {/* ── Pie de página ── */}
       <div className={`px-4 py-4 border-t border-white/10 flex flex-col gap-3`}>
-        {/* User Profile Card */}
+        {/* Tarjeta de perfil de usuario */}
         {userEmail && (
           <div className={`flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 transition-all ${isCollapsed ? 'justify-center' : ''}`}>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-inner">
@@ -199,13 +199,13 @@ export default function Sidebar({ activeView, onNavigate }) {
           </div>
         )}
 
-        {/* Status Indicator */}
+        {/* Indicador de estado */}
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2 px-1'}`}>
           <div className="w-2 h-2 rounded-full bg-bbva-success shrink-0" style={{ animation: 'pulse-dot 2s ease-in-out infinite' }} />
           {!isCollapsed && <span className="text-[11px] text-blue-300/50 whitespace-nowrap">Backend conectado</span>}
         </div>
         
-        {/* Logout Button */}
+        {/* Botón de cerrar sesión */}
         <button
           type="button"
           onClick={async (e) => { e.preventDefault(); await signOut(); }}

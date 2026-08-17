@@ -57,7 +57,7 @@ async def favicon():
     """Silencia los 404 de favicon en los logs."""
     return Response(status_code=204)
 
-# ── Launcher ──
+# ── Lanzador ──
 def lanzar_ventana_navegador():
     """
     Espera a que el servidor FastAPI inicie y abre 

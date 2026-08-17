@@ -39,7 +39,7 @@ export default function AutollenadoPage() {
       .catch(() => { });
   }, []);
 
-  /* ── auto-fill logic ── */
+  /* ── Lógica de autollenado ── */
   useEffect(() => {
     if (form.datos_convenio.nombre_supervisor === 'JHON QUISPE') {
       if (form.datos_convenio.dni_supervisor !== '12345678') {
@@ -48,13 +48,13 @@ export default function AutollenadoPage() {
     }
   }, [form.datos_convenio.nombre_supervisor]);
 
-  /* ── totals ── */
+  /* ── Totales calculados ── */
   const sumSoles = (arr) => arr.reduce((s, r) => s + (parseFloat(r.monto_soles) || 0), 0);
   const totalPrestamos = useMemo(() => sumSoles(form.compra_deuda.prestamos), [form.compra_deuda.prestamos]);
   const totalTC = useMemo(() => sumSoles(form.compra_deuda.tarjetas), [form.compra_deuda.tarjetas]);
   const totalCD = totalPrestamos + totalTC;
 
-  /* ── Debounced live preview (800 ms) con AbortController ── */
+  /* ── Vista previa en vivo con debounce y AbortController ── */
   useEffect(() => {
     if (!form.plantilla_id) {
       if (previewUrl) {
@@ -105,7 +105,7 @@ export default function AutollenadoPage() {
     };
   }, [form, totalPrestamos, totalTC, totalCD]);
 
-  /* ── submit: Flujo unificado (Llenado + Partición) ── */
+  /* ── Envío: Flujo unificado (Llenado + Partición) ── */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.plantilla_id) { setStatus({ type: 'error', message: 'Seleccione una plantilla.' }); return; }
@@ -214,14 +214,14 @@ export default function AutollenadoPage() {
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      {/* Header — fijo en altura, no scrollea */}
+      {/* Encabezado — fijo en altura, sin scroll */}
       <div className="shrink-0 px-6 lg:px-8 pt-6 pb-4 max-w-[1600px] w-full mx-auto">
         <div className="mb-4 animate-fade-in">
           <h1 className="text-2xl font-bold text-slate-800">Autollenado de Expedientes</h1>
           <p className="text-slate-400 text-sm mt-1">Complete el formulario y genere el expediente PDF automáticamente</p>
         </div>
 
-        {/* Alerts */}
+        {/* Alertas */}
         {status.message && (
           <div className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 animate-fade-in ${status.type === 'success'
             ? 'bg-green-50 text-green-700 border border-green-200'

@@ -119,7 +119,7 @@ export default function ConfigParticionPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-        {/* ── Form Card ── */}
+        {/* ── Tarjeta de Formulario ── */}
         <div className="lg:col-span-3 animate-fade-in">
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-bbva-sky/60 to-white flex items-center gap-3">
@@ -149,7 +149,7 @@ export default function ConfigParticionPage() {
                   className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-800 placeholder:text-slate-300 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-bbva-blue/20 focus:border-bbva-blue transition-all duration-200" />
               </div>
 
-              {/* Dynamic table */}
+              {/* Tabla dinámica de reglas */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-500 mb-2 uppercase tracking-wide">
                   Reglas de Corte <span className="text-red-400">*</span>
@@ -182,7 +182,7 @@ export default function ConfigParticionPage() {
                 </button>
               </div>
 
-              {/* Action Buttons */}
+              {/* Botones de acción */}
               <div className="flex gap-3">
                 {editingId && (
                   <button type="button" onClick={resetForm}
@@ -203,7 +203,7 @@ export default function ConfigParticionPage() {
           </div>
         </div>
 
-        {/* ── Saved templates list ── */}
+        {/* ── Lista de plantillas guardadas ── */}
         <div className="lg:col-span-2 animate-fade-in">
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden h-full">
             <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-bbva-sky/60 to-white flex items-center gap-3">
