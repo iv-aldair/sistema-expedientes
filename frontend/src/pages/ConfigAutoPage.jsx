@@ -38,6 +38,7 @@ export default function ConfigAutoPage() {
   const [deleting, setDeleting] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const fileRef = useRef(null);
 
   /* ── Cargar plantillas ── */
@@ -92,7 +93,11 @@ export default function ConfigAutoPage() {
       const data = await res.json();
 
       if (res.ok) {
-        setStatus({ type: 'success', message: data.mensaje || 'Plantilla guardada.' });
+        setStatus({ type: 'success', message: isEditing ? 'Plantilla actualizada.' : (data.mensaje || 'Plantilla guardada.') });
+        if (isEditing) {
+          setUpdateSuccess(true);
+          setTimeout(() => setUpdateSuccess(false), 3000);
+        }
         handleCancelEdit(); // Limpia y vuelve al estado de "Nueva Plantilla"
         await fetchPlantillas();
       } else {
@@ -107,6 +112,7 @@ export default function ConfigAutoPage() {
 
   /* ── Eliminar plantilla ── */
   const handleDelete = async (id) => {
+    if (!window.confirm("¿Estás seguro de eliminar la plantilla?")) return;
     setDeleting(id);
     try {
       const res = await fetch(`${API}/api/plantillas/${id}`, { method: 'DELETE' });
@@ -191,7 +197,9 @@ export default function ConfigAutoPage() {
                     </svg>
                   </div>
                   <p className={`text-xs transition-colors ${isEditing ? 'text-slate-500 group-hover:text-yellow-600' : 'text-slate-500 group-hover:text-bbva-blue'}`}>
-                    {archivo ? (
+                    {updateSuccess ? (
+                      <span className="font-medium text-green-600">Plantilla actualizada ✓</span>
+                    ) : archivo ? (
                       <span className="font-medium text-bbva-dark">{fileLabel}</span>
                     ) : (
                       <>Click para seleccionar <span className="font-medium">.pdf</span></>
@@ -276,7 +284,7 @@ export default function ConfigAutoPage() {
                       <p className="text-sm font-medium text-slate-700 truncate">{p.nombre}</p>
                       <p className="text-[10px] text-slate-400">Archivo: {p.archivo || `${p.id}.pdf`}</p>
                     </div>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                    <div className="flex items-center gap-1 transition-all">
                       <button
                         onClick={() => handleEdit(p)}
                         disabled={deleting === p.id}

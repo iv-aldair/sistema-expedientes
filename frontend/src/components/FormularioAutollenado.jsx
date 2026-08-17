@@ -138,16 +138,16 @@ export default function FormularioAutollenado({
       if (isText) {
         const { selectionStart, selectionEnd, value } = active;
         const atStart = selectionStart === 0 && selectionEnd === 0;
-        const atEnd   = selectionStart === value.length && selectionEnd === value.length;
+        const atEnd = selectionStart === value.length && selectionEnd === value.length;
         // Solo navegamos a otro campo si el cursor está en los extremos
-        if (e.key === 'ArrowLeft'  && !atStart) return;
-        if (e.key === 'ArrowRight' && !atEnd)   return;
+        if (e.key === 'ArrowLeft' && !atStart) return;
+        if (e.key === 'ArrowRight' && !atEnd) return;
       }
     }
 
     // Select abiertos: Up/Down los maneja el navegador (lista de opciones)
     if (active.tagName === 'SELECT' &&
-        (e.key === 'ArrowUp' || e.key === 'ArrowDown')) return;
+      (e.key === 'ArrowUp' || e.key === 'ArrowDown')) return;
 
     // Obtener todos los campos visibles del formulario
     const fields = Array.from(
@@ -187,7 +187,7 @@ export default function FormularioAutollenado({
           distrito: convenioData.distrito,
           provincia: convenioData.provincia,
           departamento: convenioData.departamento,
-          giro_negocio: convenioData.giro_negocio,
+          giro_empresa: convenioData.giro_negocio,
         },
       }));
       setConvenioAutoFilled(true);
@@ -348,7 +348,7 @@ export default function FormularioAutollenado({
       <AccordionSection title="Datos de Domicilio" subtitle="Dirección de residencia actual" icon={<IconUser />} isOpen={openSections.s4} onToggle={() => toggleSection('s4')}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {ps('datos_personales', 'domicilio_actual', 'Situación de Vivienda', [{ value: '', label: '— Seleccione —' }, { value: 'Familiar', label: 'Familiar' }, { value: 'Financiada', label: 'Financiada' }, { value: 'Alquilada', label: 'Alquilada' }, { value: 'Propia', label: 'Propia' }])}
-          {pi('datos_personales', 'tipo_via', 'Av./Calle/Jr.', { placeholder: 'Av. Ejemplo' })}
+          {pi('datos_personales', 'av_calle_jr', 'Avenida/Calle/Jirón/Pasaje', { placeholder: 'Ej. Av. Larco 123' })}
           {pi('datos_personales', 'numero_lt', 'Número / Lt')}
           {pi('datos_personales', 'dpto_int', 'Dpto / Int')}
           {pi('datos_personales', 'urbanizacion', 'Urbanización')}
@@ -366,12 +366,13 @@ export default function FormularioAutollenado({
             {pi('datos_laborales', 'giro_empresa', 'Giro de Empresa')}
             {pi('datos_personales', 'cargo_actual', 'Cargo Actual')}
             {pi('datos_laborales', 'fecha_ingreso', 'Fecha de Ingreso', { type: 'date' })}
-            {pi('datos_laborales', 'tipo_via', 'Av./Calle/Jr.', { placeholder: 'Av. Laboral' })}
+            {pi('datos_laborales', 'av_calle_jr', 'Avenida/Calle/Jirón/Pasaje', { placeholder: 'Ej. Av. Laboral 456' })}
             {pi('datos_laborales', 'numero_lt', 'Número / Lt')}
             {pi('datos_laborales', 'dpto_int', 'Dpto / Int')}
             {pi('datos_laborales', 'distrito', 'Distrito')}
             {pi('datos_laborales', 'provincia', 'Provincia')}
             {pi('datos_laborales', 'departamento', 'Departamento')}
+            {pi('datos_laborales', 'ingreso_neto', 'Ingreso Neto')}
           </div>
         </SubGroup>
         <SubGroup title="Instituciones Especiales (Opcional)">

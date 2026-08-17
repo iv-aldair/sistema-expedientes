@@ -22,7 +22,7 @@ class DatosPersonales(BaseModel):
     fecha_firma: Optional[str] = None
     # Domicilio
     domicilio_actual: Optional[str] = None
-    tipo_via: Optional[str] = None
+    av_calle_jr: Optional[str] = None
     numero_lt: Optional[str] = None
     dpto_int: Optional[str] = None
     urbanizacion: Optional[str] = None
@@ -56,12 +56,13 @@ class DatosPrestamo(BaseModel):
 class DatosLaborales(BaseModel):
     giro_empresa: Optional[str] = None
     fecha_ingreso: Optional[str] = None
-    tipo_via: Optional[str] = None
+    av_calle_jr: Optional[str] = None
     numero_lt: Optional[str] = None
     dpto_int: Optional[str] = None
     distrito: Optional[str] = None
     provincia: Optional[str] = None
     departamento: Optional[str] = None
+    ingreso_neto: Optional[str] = None
 
 
 class MinisterioPublico(BaseModel):

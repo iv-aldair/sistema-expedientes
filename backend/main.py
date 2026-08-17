@@ -27,7 +27,7 @@ app.add_middleware(
         "http://127.0.0.1:5173", 
         "http://127.0.0.1:5174",
         "http://localhost:8000",
-    "https://sistema-expedientes-seven.vercel.app" # TODO: Reemplazar con tu dominio real de Vercel
+        "https://sistema-expedientes-seven.vercel.app" # TODO: Reemplazar con tu dominio real de Vercel
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -70,4 +70,4 @@ def lanzar_ventana_navegador():
 
 if __name__ == "__main__":
     threading.Thread(target=lanzar_ventana_navegador, daemon=True).start()
-    uvicorn.run("main:app", host="127.0.0.1", port=8000)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

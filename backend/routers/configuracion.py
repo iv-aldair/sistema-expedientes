@@ -28,6 +28,7 @@ def obtener_plantillas(
                 "id": p["nombre_plantilla"],
                 "nombre": p["nombre_plantilla"],
                 "archivo": p["config_autollenado"].get("archivo_pdf", ""),
+                "config_particion": p.get("config_particion"),
                 "is_global": p.get("is_global", True),
                 "owner_id": p.get("owner_id"),
             })
@@ -96,7 +97,9 @@ def eliminar_plantilla(plantilla_id: str):
         if os.path.exists(file_path):
             os.remove(file_path)
 
-    # (Nota: No eliminamos de Supabase explícitamente para no romper config de partición si existiera,
-    # solo simulamos el delete para mantener compatibilidad, o se podría hacer un UPDATE config_autollenado = null)
-    
+    # Actualizar config_autollenado = null en Supabase para que ya no aparezca en la lista
+    exito = upsert_config_autollenado(plantilla_id, None)
+    if not exito:
+        return JSONResponse(status_code=500, content={"detail": "Error al actualizar la plantilla en Supabase."})
+        
     return {"mensaje": f"Archivo de plantilla {plantilla_id} eliminado."}

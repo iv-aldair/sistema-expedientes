@@ -1,5 +1,6 @@
 import io
 import re
+# pyrefly: ignore [missing-import]
 import fitz
 import zipfile
 import os
@@ -8,6 +9,7 @@ from schemas import AutollenadoRequest
 
 # ── Mapeo: clave interna → nombre real del campo en el PDF de Nitro ──
 PDF_FIELD_MAP = {
+# -- DATOS PERSONALES --
     "dp_tipo_documento":   "TIPO DE DOCUMENTO DE IDENTIDAD",
     "dp_numero_documento": "dp.numero_documento",
     "dp_sexo":             "M",
@@ -20,13 +22,15 @@ PDF_FIELD_MAP = {
     "dp_talla":            "dp.talla",
     "dp_peso":             "dp.peso",
     "dp_telefono_celular": "dp.telefono_celular",
-    "dp_tipo_via":         "AVCALLE JRPSJE_2",
+    "dp_av_calle_jr":      "dp.AVCALLE",
     "dp_numero_lt":        "N_MZ_LT",
     "dp_distrito":         "DISTRITO",
     "dp_provincia":        "PROVINCIA",
     "dp_departamento":     "DEPARTAMENTO",
-    "dp_domicilio_actual": "DIRECCION ACTUAL",
-    "conv_tasa":              "TASA INTERES",
+    "dp_avcalle_jpsje": "AVCALLE JRPSJE",
+    "dp_periodo_gracia":   "PERIODO DE GRACIA",
+    #DATOS DE CONVENIO --
+    "conv_tasa":              "TASA INTERES",   
     "conv_oficina_derivar":   "OFICINA PROPIETARIA",
     "conv_nombre_supervisor": "dc.nombre_supervisor",
     "conv_nombre_promotor":   "dc.nombre_promotor",
@@ -36,15 +40,20 @@ PDF_FIELD_MAP = {
     "lab_cargo_actual":       "CARGO",
     "total_prestamos":        "Total CD1",
     "total_tc":               "Total CD2",
+    #DATOS PRESTAMO --
     "prest_monto_solicitado":   "MONTO SOLICITADO",
+    "prest_plazos_meses":     "PLAZO MESES",   
+    #DATOS LABORALES --
     "lab_giro_empresa":         "GIRO DE LA EMPRESA",
-    "lab_provincia":          "LAB PROVINCIA",
-    "lab_distrito":           "LAB DISTRITO",
-    "lab_departamento":       "LAB DEPARTAMENTO",
-    "lab_tipo_via":           "LAB AVCALLE JRPSJE_2",
+    "lab_provincia":          "LAB_PROVINCIA",
+    "lab_distrito":           "LAB_DISTRITO",
+    "lab_departamento":       "LAB_DEPARTAMENT",
+    "lab_av_calle_jr":        "LAB_AVCALLEJR",
     "lab_numero_lt":          "LAB_N_MZ_LT",
-    "lab_domicilio_actual":   "LAB DIRECCION ACTUAL",
+    "lab_centro_trabajo_actual": "LAB DIRECCION ACTUAL",
+    "lab_ruc":                "RUC",
     "lab_fecha_ingreso":      "FECHA DE INGRESO",
+    "lab_ingreso_neto":       "LAB INGRESO NETO",
     # Campos compuestos
     "dp_direccion_completa":  "DIRECCION COMPLETA",
     "dp_ubigeo_completo":     "UBIGEO",
@@ -166,6 +175,7 @@ def flatten_data(data: AutollenadoRequest) -> dict:
         if edu == "Secundaria": raw["chk_edu_secundaria"] = "Yes"
         elif edu == "Universitaria": raw["chk_edu_universitaria"] = "Yes"
         elif edu == "Técnica": raw["chk_edu_tecnica"] = "Yes"
+        elif edu == "superior": raw["chk_edu_superior"] = "Yes"
 
     # 5. Estado Civil
     civil = raw.pop("dp_estado_civil", None)

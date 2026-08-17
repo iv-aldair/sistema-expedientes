@@ -93,6 +93,7 @@ export default function ConfigParticionPage() {
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("¿Estás seguro de eliminar la plantilla?")) return;
     try {
       await fetch(`${API}/api/particion/plantillas/${id}`, { method: 'DELETE' });
       // Si estamos editando la que se elimina, limpiar el form
@@ -137,7 +138,7 @@ export default function ConfigParticionPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-5">
+            <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
               {/* Nombre */}
               <div>
                 <label className="block text-[11px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
@@ -154,23 +155,25 @@ export default function ConfigParticionPage() {
                   Reglas de Corte <span className="text-red-400">*</span>
                 </label>
                 <div className="border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="grid grid-cols-[140px_1fr_40px] gap-0 bg-slate-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-                    <span>Nombre archivo</span><span>Páginas (ej: 1-3, 5, 8-10)</span><span />
+                  <div className="grid grid-cols-[140px_1fr_40px] gap-0 bg-slate-50 px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                    <span>Nombre archivo</span><span>Páginas (ej: 1-3, 5, 8-10)</span><span className="text-center">Quitar</span>
                   </div>
-                  {cortes.map((c, i) => (
-                    <div key={i} className="grid grid-cols-[140px_1fr_40px] gap-2 px-3 py-2 border-t border-slate-100 items-center">
-                      <input type="text" value={c.nombre_corte} onChange={(e) => updateCorte(i, 'nombre_corte', e.target.value)}
-                        placeholder="cs" className="px-2 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-bbva-blue/30 focus:border-bbva-blue" />
-                      <input type="text" value={c.paginas} onChange={(e) => updateCorte(i, 'paginas', e.target.value)}
-                        placeholder="1-3, 5, 8-10" className="px-2 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-bbva-blue/30 focus:border-bbva-blue" />
-                      <button type="button" onClick={() => removeCorte(i)} disabled={cortes.length <= 1}
-                        className="p-1 text-slate-300 hover:text-red-500 disabled:opacity-30 transition-colors mx-auto">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
+                  <div className="bg-slate-50/50 p-2 space-y-2">
+                    {cortes.map((c, i) => (
+                      <div key={i} className="grid grid-cols-[140px_1fr_40px] gap-3 px-3 py-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm items-center hover:border-bbva-blue/30 hover:shadow-md transition-all">
+                        <input type="text" value={c.nombre_corte} onChange={(e) => updateCorte(i, 'nombre_corte', e.target.value)}
+                          placeholder="CS" className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-bbva-blue/20 focus:border-bbva-blue transition-all" />
+                        <input type="text" value={c.paginas} onChange={(e) => updateCorte(i, 'paginas', e.target.value)}
+                          placeholder="Ej: 1-3, 5, 8-10" className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-bbva-blue/20 focus:border-bbva-blue transition-all" />
+                        <button type="button" onClick={() => removeCorte(i)} disabled={cortes.length <= 1}
+                          className="p-2 text-slate-300 bg-slate-50 rounded-lg hover:text-red-500 hover:bg-red-50 disabled:opacity-30 transition-all mx-auto shadow-sm border border-slate-100">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <button type="button" onClick={addCorte}
                   className="mt-2 px-3 py-1.5 text-xs font-medium text-bbva-blue border border-bbva-light rounded-lg hover:bg-bbva-sky transition-colors flex items-center gap-1">

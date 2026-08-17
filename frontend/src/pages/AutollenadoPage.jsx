@@ -8,10 +8,10 @@ const emptyTarjeta = { entidad: '', moneda: 'PEN', numero_tarjeta: '', monto_sol
 
 const INITIAL = {
   plantilla_id: '',
-  datos_personales: { tipo_documento: 'DNI', numero_documento: '', sexo: '', apellido_paterno: '', apellido_materno: '', primer_nombre: '', segundo_nombre: '', estado_civil: '', nivel_educacion: '', cargo_actual: '', email: '', talla: '', peso: '', domicilio_actual: '', tipo_via: '', numero_lt: '', dpto_int: '', urbanizacion: '', distrito: '', provincia: '', departamento: '', localidad: '', telefono_celular: '', fecha_nacimiento: '', fecha_firma: '' },
+  datos_personales: { tipo_documento: 'DNI', numero_documento: '', sexo: '', apellido_paterno: '', apellido_materno: '', primer_nombre: '', segundo_nombre: '', estado_civil: '', nivel_educacion: '', cargo_actual: '', email: '', talla: '', peso: '', domicilio_actual: '', av_calle_jr: '', numero_lt: '', dpto_int: '', urbanizacion: '', distrito: '', provincia: '', departamento: '', localidad: '', telefono_celular: '', fecha_nacimiento: '', fecha_firma: '' },
   datos_convenio: { tipo_convenio: '', ruc: '', jefe_negocio: '', tasa: '', oficina_derivar: '', nombre_supervisor: '', dni_supervisor: '', nombre_promotor: '', dni_promotor: '' },
   datos_prestamo: { tipo_prestamo: '', monto_solicitado: '', plazo: '', periodo_gracia: '', tipo_seguro: '' },
-  datos_laborales: { giro_empresa: '', giro_negocio: '', fecha_ingreso: '', tipo_via: '', numero_lt: '', dpto_int: '', distrito: '', provincia: '', departamento: '' },
+  datos_laborales: { giro_empresa: '', giro_negocio: '', fecha_ingreso: '', av_calle_jr: '', numero_lt: '', dpto_int: '', distrito: '', provincia: '', departamento: '' },
   instituciones_especiales: { ministerio_publico: { airhsp: '', regimen_laboral: '', dependencia: '' }, ffaa: { cip: '', godofin: '', grado: '', dependencia: '' }, essalud: { codigo: '', sede: '' } },
   compra_deuda: { prestamos: [{ ...emptyPrestamo }], tarjetas: [{ ...emptyTarjeta }] },
 };
@@ -97,7 +97,7 @@ export default function AutollenadoPage() {
       } finally {
         setIsPreviewLoading(false);
       }
-    }, 800);                               // 800 ms — rápido pero sin spam
+    }, 2500);                               // 2500 ms — evita que el servidor colapse al escribir rápido
 
     return () => {
       clearTimeout(timer);
@@ -111,9 +111,16 @@ export default function AutollenadoPage() {
     if (!form.plantilla_id) { setStatus({ type: 'error', message: 'Seleccione una plantilla.' }); return; }
 
     try {
+      // Buscar la plantilla seleccionada para saber si tiene particiones configuradas
+      const plantillaSeleccionada = plantillas.find(p => p.id === form.plantilla_id);
+      const nombrePlantilla = plantillaSeleccionada?.nombre || '';
+      const cortesConfigurados = plantillaSeleccionada?.config_particion?.cortes || [];
+      const isZip = cortesConfigurados.length > 0;
+
       // Determinar nombre sugerido antes de la petición
       const apellido = (form.datos_personales.apellido_paterno || 'Generado').replace(/\s+/g, '_');
-      const suggestedName = `Expediente_${apellido}.zip`;
+      const extension = isZip ? '.zip' : '.pdf';
+      const suggestedName = `Expediente_${apellido}${extension}`;
 
       // 2. Solicitar ubicación de guardado (Solo en navegadores Chromium)
       let fileHandle;
@@ -121,8 +128,8 @@ export default function AutollenadoPage() {
         fileHandle = await window.showSaveFilePicker({
           suggestedName: suggestedName,
           types: [{
-            description: 'Archivo ZIP o PDF',
-            accept: { 'application/zip': ['.zip'], 'application/pdf': ['.pdf'] },
+            description: isZip ? 'Archivo ZIP' : 'Documento PDF',
+            accept: isZip ? { 'application/zip': ['.zip'] } : { 'application/pdf': ['.pdf'] },
           }],
         });
       }
@@ -130,10 +137,6 @@ export default function AutollenadoPage() {
       // 4. Mostrar estado de "Cargando..." en UI
       setLoading(true);
       setStatus({ type: '', message: '' });
-
-      // Buscar el nombre de la plantilla seleccionada
-      const plantillaSeleccionada = plantillas.find(p => p.id === form.plantilla_id);
-      const nombrePlantilla = plantillaSeleccionada?.nombre || '';
 
       // Construir los datos del formulario con totales calculados
       const datosFormulario = {
@@ -220,11 +223,10 @@ export default function AutollenadoPage() {
 
         {/* Alerts */}
         {status.message && (
-          <div className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 animate-fade-in ${
-            status.type === 'success'
-              ? 'bg-green-50 text-green-700 border border-green-200'
-              : 'bg-red-50 text-red-700 border border-red-200'
-          }`}>
+          <div className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 animate-fade-in ${status.type === 'success'
+            ? 'bg-green-50 text-green-700 border border-green-200'
+            : 'bg-red-50 text-red-700 border border-red-200'
+            }`}>
             {status.type === 'success' ? '✓' : '✕'} {status.message}
             <button type="button" onClick={() => setStatus({ type: '', message: '' })} className="ml-auto text-lg leading-none opacity-50 hover:opacity-100">×</button>
           </div>
@@ -232,9 +234,8 @@ export default function AutollenadoPage() {
       </div>
 
       {/* Grid de dos columnas — ocupa el espacio restante, sin scroll en este nivel */}
-      <div className={`flex-1 overflow-hidden px-6 lg:px-8 pb-6 max-w-[1600px] w-full mx-auto grid grid-cols-1 ${
-        mostrarVistaPrevia ? 'lg:grid-cols-2 xl:grid-cols-[1fr_minmax(500px,600px)]' : ''
-      } gap-8`}>
+      <div className={`flex-1 overflow-hidden px-6 lg:px-8 pb-6 max-w-[1600px] w-full mx-auto grid grid-cols-1 ${mostrarVistaPrevia ? 'lg:grid-cols-2 xl:grid-cols-[1fr_minmax(500px,600px)]' : ''
+        } gap-8`}>
         {/* Columna Izquierda: Formulario */}
         <div className="h-full overflow-y-auto pr-4 pb-20 custom-scrollbar">
           <FormularioAutollenado

@@ -15,7 +15,7 @@ import fitz
 # pyrefly: ignore [missing-import]
 from fastapi import APIRouter   
 # pyrefly: ignore [missing-import]
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse, Response
 # pyrefly: ignore [missing-import]
 from pypdf import PdfReader, PdfWriter
 
@@ -156,7 +156,6 @@ async def generar_expediente_completo(body: dict):
 
         if not cortes:
             # Sin partición → Devolver el PDF llenado directamente
-            print("[expediente] Sin config_particion, devolviendo PDF individual.")
             filename = f"EXP_{nombre_cliente}_{timestamp}.pdf"
             return StreamingResponse(
                 pdf_buffer,
@@ -217,8 +216,8 @@ async def generar_expediente_completo(body: dict):
 
         print(f"[expediente] ZIP generado exitosamente: {zip_filename}")
 
-        return StreamingResponse(
-            zip_buffer,
+        return Response(
+            content=zip_buffer.getvalue(),
             media_type="application/zip",
             headers={
                 "Content-Disposition": f'attachment; filename="{zip_filename}"',
