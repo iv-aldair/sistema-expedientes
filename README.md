@@ -1,4 +1,5 @@
-# Sistema de Gestión y Automatización de Expedientes 📄🚀
+# Sistema de Gestión y Automatización de Expedientes 📄
+*Versión 3.1 - Producción*
 
 Plataforma web integral para la automatización, procesamiento inteligente y autollenado de expedientes crediticios y convenios, con partición dinámica de legajos PDF y control de acceso basado en roles (RBAC).
 
