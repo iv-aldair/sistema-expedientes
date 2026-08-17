@@ -20,6 +20,7 @@ class DatosPersonales(BaseModel):
     peso: Optional[str] = None
     fecha_nacimiento: Optional[str] = None
     fecha_firma: Optional[str] = None
+
     # Domicilio
     domicilio_actual: Optional[str] = None
     av_calle_jr: Optional[str] = None

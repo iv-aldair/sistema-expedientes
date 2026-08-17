@@ -153,6 +153,7 @@ def flatten_data(data: AutollenadoRequest) -> dict:
         if tipo_prest == "NUEVO": raw["chk_prest_nuevo"] = "Yes"
         elif tipo_prest == "SUBROGADO": raw["chk_prest_subrogado"] = "Yes"
         elif tipo_prest == "AMPLIACION": raw["chk_prest_ampliacion"] = "Yes"
+        elif tipo_prest == "RENOVADO": raw["chk_prest_renovado"] = "Yes"
         elif tipo_prest == "SUBROGADO Y AMPLIACION": raw["chk_prest_subrogado_ampliacion"] = "Yes"
 
     # 2. Periodo de Gracia
@@ -205,6 +206,7 @@ def flatten_data(data: AutollenadoRequest) -> dict:
     if tipo_doc is not None:
         if tipo_doc == "DNI": raw["chk_doc_dni"] = "Yes"
         elif tipo_doc in ["CE", "Carnet Extranjería"]: raw["chk_doc_ce"] = "Yes"
+        elif tipo_doc in ["PASAPORTE", "Pasaporte"]: raw["chk_doc_pasaporte"] = "Yes"
 
     # ══════ BLOQUE 4: CONVERSIÓN DE FECHAS ══════
     DATE_RE = re.compile(r'^(\d{4})-(\d{2})-(\d{2})$')

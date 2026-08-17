@@ -295,7 +295,25 @@ export default function FormularioAutollenado({
           {pi('datos_convenio', 'jefe_negocio', 'Jefe de Negocio')}
           {pi('datos_convenio', 'tasa', 'Tasa (%)', { placeholder: '12.5' })}
           {pi('datos_convenio', 'oficina_derivar', 'Oficina a Derivar')}
-          {ps('datos_convenio', 'nombre_supervisor', 'Nombre Supervisor', [{ value: '', label: '— Seleccione —' }, { value: 'JHON QUISPE', label: 'JHON QUISPE' }])}
+          <div>
+            <FormInput
+              label="Nombre Supervisor"
+              name="nombre_supervisor"
+              value={form.datos_convenio.nombre_supervisor ?? ''}
+              onChange={(e) => {
+                const val = e.target.value;
+                upd('datos_convenio', 'nombre_supervisor', val);
+                if (val.trim().toUpperCase() === 'JHON QUISPE') {
+                  upd('datos_convenio', 'dni_supervisor', '12345678');
+                }
+              }}
+              placeholder="Ej: JHON QUISPE o escribir..."
+              list="supervisores_list"
+            />
+            <datalist id="supervisores_list">
+              <option value="JHON QUISPE" />
+            </datalist>
+          </div>
           {pi('datos_convenio', 'dni_supervisor', 'DNI Supervisor', { placeholder: '12345678' })}
           {pi('datos_convenio', 'nombre_promotor', 'Nombre Promotor')}
           {pi('datos_convenio', 'dni_promotor', 'DNI Promotor', { placeholder: '12345678' })}
@@ -305,7 +323,7 @@ export default function FormularioAutollenado({
       {/* ══════ SECCIÓN 2: DATOS DEL PRÉSTAMO ══════ */}
       <AccordionSection title="Datos del Préstamo" subtitle="Detalles del crédito solicitado" icon={<IconBank />} isOpen={openSections.s2} onToggle={() => toggleSection('s2')}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {ps('datos_prestamo', 'tipo_prestamo', 'Tipo de Préstamo', [{ value: '', label: '— Seleccione —' }, { value: 'NUEVO', label: 'NUEVO' }, { value: 'SUBROGADO', label: 'SUBROGADO' }, { value: 'AMPLIACION', label: 'AMPLIACION' }, { value: 'SUBROGADO Y AMPLIACION', label: 'SUBROGADO Y AMPLIACION' }])}
+          {ps('datos_prestamo', 'tipo_prestamo', 'Tipo de Préstamo', [{ value: '', label: '— Seleccione —' }, { value: 'NUEVO', label: 'NUEVO' }, { value: 'SUBROGADO', label: 'SUBROGADO' }, { value: 'AMPLIACION', label: 'AMPLIACION' }, { value: 'RENOVADO', label: 'RENOVADO' }, { value: 'SUBROGADO Y AMPLIACION', label: 'SUBROGADO Y AMPLIACION' }])}
           {pi('datos_prestamo', 'monto_solicitado', 'Monto Solicitado (S/)', { type: 'number', placeholder: '10000' })}
           {pi('datos_prestamo', 'plazo', 'Plazo (meses)', { type: 'number', placeholder: '36' })}
           {ps('datos_prestamo', 'periodo_gracia', 'Periodo de Gracia', [{ value: '', label: '— Seleccione —' }, { value: '1 mes', label: '1 mes' }, { value: '2 meses', label: '2 meses' }])}

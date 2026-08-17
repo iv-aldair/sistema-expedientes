@@ -34,7 +34,7 @@ export function SubGroup({ title, children }) {
 }
 
 /** Campo de entrada de texto con etiqueta */
-export function FormInput({ label, name, value, onChange, type = 'text', placeholder = '', required = false, readOnly = false, className = '' }) {
+export function FormInput({ label, name, value, onChange, type = 'text', placeholder = '', required = false, readOnly = false, list, className = '', ...rest }) {
   return (
     <div className={className}>
       <label className="block text-[11px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
@@ -47,6 +47,8 @@ export function FormInput({ label, name, value, onChange, type = 'text', placeho
         onChange={onChange}
         placeholder={placeholder}
         readOnly={readOnly}
+        list={list}
+        {...rest}
         className={`w-full px-3 py-2.5 border rounded-lg text-sm transition-all duration-200
           ${readOnly
             ? 'bg-slate-50 border-slate-200 text-slate-600 cursor-not-allowed'
