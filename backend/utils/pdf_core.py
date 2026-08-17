@@ -238,12 +238,14 @@ def flatten_data(data: AutollenadoRequest) -> dict:
 
     # --- Ubigeo personal completo (Distrito / Provincia / Departamento) ---
     dp_ubigeo = _join_ubigeo(
-        raw.get("dp_distrito", ""),
-        raw.get("dp_provincia", ""),
-        raw.get("dp_departamento", ""),
+        raw.get("dp_distrito") or raw.get("distrito", ""),
+        raw.get("dp_provincia") or raw.get("provincia", ""),
+        raw.get("dp_departamento") or raw.get("departamento", ""),
     )
     if dp_ubigeo:
         raw["dp_ubigeo_completo"] = dp_ubigeo
+        raw["dp_ubigeo"] = dp_ubigeo
+        raw["ubigeo"] = dp_ubigeo
 
     # --- Dirección laboral completa ---
     lab_dir = _join(
@@ -253,14 +255,15 @@ def flatten_data(data: AutollenadoRequest) -> dict:
     if lab_dir:
         raw["lab_direccion_completa"] = lab_dir
 
-    # --- Ubigeo laboral completo ---
+    # --- Ubigeo laboral completo (Distrito / Provincia / Departamento) ---
     lab_ubigeo = _join_ubigeo(
-        raw.get("lab_distrito", ""),
-        raw.get("lab_provincia", ""),
-        raw.get("lab_departamento", ""),
+        raw.get("lab_distrito") or raw.get("distrito", ""),
+        raw.get("lab_provincia") or raw.get("provincia", ""),
+        raw.get("lab_departamento") or raw.get("departamento", ""),
     )
     if lab_ubigeo:
         raw["lab_ubigeo_completo"] = lab_ubigeo
+        raw["lab_ubigeo"] = lab_ubigeo
 
     # ══════ BLOQUE 6: MAPEO FINAL Y RETORNO ══════
     flat: dict[str, str] = {}
